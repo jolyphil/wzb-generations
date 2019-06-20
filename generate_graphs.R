@@ -17,12 +17,6 @@ ess <- readRDS("data/ess.rds")
 # Recode variables ====
 
 # _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
-# Age ----
-
-ess <- ess %>%
-  mutate(age = year - yrbrn)
-
-# _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 # Generations ----
 
 var_levels <- c("Boomer", "Xer", "Millennial")
@@ -78,8 +72,6 @@ ess <- ess %>%
 # ______________________________________________________________________________
 # Collapse at the generation-round ====
 
-# Note: would need to weight the data here...
-
 ess_gr <- ess %>%
   filter(!is.na(generation)) %>%
   group_by(essround, generation) %>%
@@ -94,7 +86,7 @@ ess_gr <- ess %>%
                     pbldmn,
                     bctprd,
                     clsprty), 
-               mean, na.rm = T) %>%
+               mean, na.rm = T) %>% # Need to weight the data here...
   mutate(year = round(year))
 
 # ______________________________________________________________________________
@@ -124,6 +116,9 @@ label <- c("Interested in politics (proportion)",
            "Boycotted certain products, last 12 months(proportion)",
            "Feel closer to a particular party (proportion)"
            )
+
+# _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+# Loop over variables and export graphs ----
 
 for(i in seq_along(varname)) {
   
