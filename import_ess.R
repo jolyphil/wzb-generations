@@ -10,7 +10,7 @@ library(essurvey) # Downloads main ESS datafiles
 # ______________________________________________________________________________
 # Save ESS email ====
 
-ess_email <- "your@email.com" # <-- Replace: your email has to be
+ess_email <- "ess@byom.de" # <-- Replace: your email has to be
 #                                            registered on the ESS
 #                                            website.
 # ______________________________________________________________________________
