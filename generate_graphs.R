@@ -134,6 +134,8 @@ for(i in seq_along(varname)) {
                                     "Generation X (1970-84)", 
                                     "Millennials (1985-...)"))
   
+  filepath <- paste0("figures/", varname[i], ".png")
+  ggsave(filepath, p)
   filepath <- paste0("figures/", varname[i], ".pdf")
   ggsave(filepath, p)
 }
