@@ -139,3 +139,50 @@ for(i in seq_along(varname)) {
   filepath <- paste0("figures/", varname[i], ".pdf")
   ggsave(filepath, p)
 }
+
+# _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+# Compute and plot "Age of Interview" graphs ----
+
+plot_agedoi_freq <- function(.data, value){
+  values <- enquo(value)
+  
+  .data %>% 
+    filter(!is.na(generation)) %>%
+    # Age at date of interview
+    mutate(age_doi = year - yrbrn) %>% 
+    # Compute weighted means
+    group_by(generation, age_doi) %>% 
+    count(!!values, wt = dweight) %>%
+    filter(!is.na(!!values)) %>% 
+    mutate(f = n/sum(n)) %>% 
+    # Remove when to few cases
+    filter(!(sum(n) < 30)) %>%
+    # Clean
+    filter(!!values == 1) %>% 
+    select(-n, -!!values) %>% 
+    # Generate plot
+    ggplot(aes(
+      x = age_doi, y = f,
+      group = generation, color = generation
+    )) + 
+    geom_point() +
+    geom_smooth(method = 'loess', formula = 'y ~ x') +
+    labs(x = "Age at date of interview",
+         y = tibble(varname, label) %>% 
+           filter(varname == quo_name(values)) %>% .$label
+    ) +
+    scale_x_continuous()
+  
+    ggsave(paste0("./figures/agedoi-",quo_name(values),".png"))
+}
+
+plot_agedoi_freq(ess, polintr)
+plot_agedoi_freq(ess, vote)
+plot_agedoi_freq(ess, contplt)
+plot_agedoi_freq(ess, wrkprty)
+plot_agedoi_freq(ess, wrkorg)
+plot_agedoi_freq(ess, badge)
+plot_agedoi_freq(ess, sgnptit)
+plot_agedoi_freq(ess, pbldmn)
+plot_agedoi_freq(ess, bctprd)
+plot_agedoi_freq(ess, clsprty)
