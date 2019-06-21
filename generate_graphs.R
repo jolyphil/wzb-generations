@@ -176,13 +176,7 @@ plot_agedoi_freq <- function(.data, value){
     ggsave(paste0("./figures/agedoi-",quo_name(values),".png"))
 }
 
-plot_agedoi_freq(ess, polintr)
-plot_agedoi_freq(ess, vote)
-plot_agedoi_freq(ess, contplt)
-plot_agedoi_freq(ess, wrkprty)
-plot_agedoi_freq(ess, wrkorg)
-plot_agedoi_freq(ess, badge)
-plot_agedoi_freq(ess, sgnptit)
-plot_agedoi_freq(ess, pbldmn)
-plot_agedoi_freq(ess, bctprd)
-plot_agedoi_freq(ess, clsprty)
+
+c("polintr", "vote", "contplt", "wrkprty", "wrkorg", "badge", "sgnptit",
+  "pbldmn", "bctprd", "clsprty") %>% 
+  purrr::map(~plot_agedoi_freq(ess, !!parse_quo(.x, env = current_env())))
