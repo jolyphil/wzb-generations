@@ -86,7 +86,7 @@ ess_gr <- ess %>%
                     pbldmn,
                     bctprd,
                     clsprty), 
-               ~weighted.mean(., dweight,  na.rm = T ))
+               ~weighted.mean(., dweight,  na.rm = T )) %>% 
   mutate(year = round(year))
 
 # ______________________________________________________________________________
