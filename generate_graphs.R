@@ -5,6 +5,7 @@
 # ******************************************************************************
 
 library(tibble) # Dataframes
+library(rlang)
 library(dplyr) # Data wrangling
 library(ggplot2) # Graphs
 
@@ -12,6 +13,7 @@ library(ggplot2) # Graphs
 # Load data ====
 
 ess <- readRDS("data/ess.rds")
+allbus <- readRDS("./data/allbus-reduced.rds")
 
 # ______________________________________________________________________________
 # Recode variables ====
@@ -26,6 +28,11 @@ ess <- ess %>%
                                 yrbrn >= 1970 & yrbrn <= 1984 ~ "Xer",
                                 yrbrn >= 1985 ~ "Millennial"),
          generation = factor(generation, levels = var_levels))
+
+# _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+# Age at date of interview ----
+# 
+ess <- ess %>% mutate(age_doi = year - yrbrn)
 
 # _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 # Political interest ----
@@ -143,13 +150,11 @@ for(i in seq_along(varname)) {
 # _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 # Compute and plot "Age of Interview" graphs ----
 
-plot_agedoi_freq <- function(.data, value){
+plot_agedoi_freq <- function(.data, value, fname = "agedoi"){
   values <- enquo(value)
   
   .data %>% 
     filter(!is.na(generation)) %>%
-    # Age at date of interview
-    mutate(age_doi = year - yrbrn) %>% 
     # Compute weighted means
     group_by(generation, age_doi) %>% 
     count(!!values, wt = dweight) %>%
@@ -173,10 +178,12 @@ plot_agedoi_freq <- function(.data, value){
     ) +
     scale_x_continuous()
   
-    ggsave(paste0("./figures/agedoi-",quo_name(values),".png"))
+    ggsave(paste0("./figures/",fname ,"-",quo_name(values),".png"))
 }
-
 
 c("polintr", "vote", "contplt", "wrkprty", "wrkorg", "badge", "sgnptit",
   "pbldmn", "bctprd", "clsprty") %>% 
   purrr::map(~plot_agedoi_freq(ess, !!parse_quo(.x, env = current_env())))
+
+plot_agedoi_freq(allbus, polintr, fname = "agedoi-allbus")
+
