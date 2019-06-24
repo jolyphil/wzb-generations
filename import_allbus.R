@@ -1,7 +1,6 @@
 # ******************************************************************************
 # Project: Generations, article for the WZB-Mitteilungen
 # Task:    Import and Clean Allbus Data
-# Author:  Philippe Joly, WZB & HU-Berlin
 # ******************************************************************************
 
 # 1. Download as registered user:
@@ -16,11 +15,13 @@ allbus <- read_dta("./data/ZA4586_v1-0-0.dta")
 
 # pa02a       Interest in Politics (1 = very strong, 5 = not at all)
 # pv01        Vote choice
+# sm03        Member of a political party
 # wghtptew    Person weight for east/west combined analysis
 # wghtpt      Person weight for east/west seperated analysis
+# eastwest    Region of the interview (1 = West, 2 = East)
 
 allbus %>%
-  select(year, yborn, respid, pa02a, pv01, wghtptew, wghtpt) %>% 
+  select(year, yborn, respid, pa02a, pv01, sm03, wghtptew, wghtpt, eastwest) %>% 
   mutate(
     # Age and Generations
     yborn      = ifelse(yborn < 0, NA, yborn),
@@ -40,6 +41,12 @@ allbus %>%
       pa02a %in% c(1,2) ~ 1,
       pa02a %in% c(3:5) ~ 2,
       pa02a < 0 ~ NA_real_
+    ),
+    # Party member
+    mmbprty = case_when(
+      sm03 == 0 ~ 0,
+      sm03 == 1 ~ 1,
+      sm03 < 0 ~ NA_real_
     ),
     # Weight
     dweight = wghtptew

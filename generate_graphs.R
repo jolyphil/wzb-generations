@@ -1,7 +1,6 @@
 # ******************************************************************************
 # Project: Generations, article for the WZB-Mitteilungen
 # Task:    Generate graphs 
-# Author:  Philippe Joly, WZB & HU-Berlin
 # ******************************************************************************
 
 library(tibble) # Dataframes
@@ -186,4 +185,4 @@ c("polintr", "vote", "contplt", "wrkprty", "wrkorg", "badge", "sgnptit",
   purrr::map(~plot_agedoi_freq(ess, !!parse_quo(.x, env = current_env())))
 
 plot_agedoi_freq(allbus, polintr, fname = "agedoi-allbus")
-
+plot_agedoi_freq(allbus, mmbprty, fname = "agedoi-allbus")
