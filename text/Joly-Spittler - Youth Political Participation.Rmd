@@ -1,0 +1,93 @@
+---
+title: "Youth Political Participation"
+author: "Philippe Joly and Marcus Spittler"
+date: "6/28/2019"
+output: word_document
+---
+
+# Millennials: Changing the Face of Political Participation in Germany?
+
+## Outline
+
+- Introduction [1000]
+    - Friday4Future shows the youth engagement in non-representational activities. General wisdom: We see a rise of that.
+- Literature review [2500]
+    - Puzzle: So if we see such a rise of non-representational participation, is 1) age, cohort, period effect? and 2) an extension of the existing repertoire or its replacement?
+    - Methodological problems explained and how we tackle them here in an "age at date of interview"-plot
+- Empirical findings [5000]
+    - Representational
+        - Feel closer to a party [plot here?]
+        - Voting
+    - Non-representational
+        - Political interest [2000]
+        - Worked in another organization
+        - Boycotts
+- Summary [1000]
+
+
+## Introduction
+
+- The last European elections and the Friday for Future demonstrations have sparked a new interest – in academia and in the wider public – for the political participation of young citizens.
+- Questions:
+    - But how exactly are Millennials engaging in politics? Are they participating more or less than older generations? Does their repertoire of participation differ significantly?
+- In this paper:
+    - We review the literature on generations and political participation. We highlight the very tricky data and methodological problems associated with this type of research.
+    - We compare the repertoire of political participation of Millennials with those of Baby boomers and Xers in Germany using data of the European Social Survey collected from 2002 [2003?] to 2016 [2017?].
+    - We show that Millennials are in general less active than the older generations, but this lower level of engagement might be an artifact of an age effect: Millennials are sometimes more mobilized, in certain forms of political participation, than Xers were at the same age.
+
+## Literature Review
+
+- Measuring generational differences in political participation (or, actually, any type of generational difference) presents a certain number of challenges.
+- Because age is perfectly explained by cohort and period (just subtract the first to the second), this creates a statistical identification problem that has been tormenting social scientists for decades. No statistical solution allows for the perfect separation of the age, period, and cohort effects. Scholars can either leave one of the three terms aside or come up with approximate estimations. That’s why we need to be extremely careful when analyzing results of research postulating the presence of generational effects.
+- A generational analysis also requires data to be collected over a long period of time: we need to track multiple cohorts at different ages and points in time. In the field of political participation, the first repeated, nationally-representative surveys go back to the 1970s and became more systematic in the 1980s. This leaves us with a relatively short coverage to assess the evolution political behavior across generations and time.
+- On the basis of these repeated surveys, most authors now agree that there has been a rise in extra-parliamentary forms of participation over the past decades in Western Europe and North America. This includes political actions like signing petitions, joining in boycotts, or taking part in demonstrations. These forms of political participation are not directly linked (although they might be) to the electoral process.
+- Authors have been debating whether this change in political participation is driven by a period or a cohort effect.
+- Partisans of the period theory suggest that changes in the repertoire of political participation are linked to technological evolution, the transformation of post-industrial economies, the rise of new cleavages and new political issues centered on a third generation of human rights (right to the environment, LGBT rights, etc.).
+- Partisans of the cohort theory argue that young citizens, through political socialization, have adopted a distinct set of attitudes and behavior: they appear to be more postmaterialistic and they increasingly value self-expression, which leads them to embrace elite-challenging forms of participation.
+- The empirical evidence for a period or a cohort effect on political participation in Western democracies remains mixed. While some argue that, in the US and Western Europe, the highest involvement in extra-parliamentary forms of participation is among the cohort of people who grew up with the events of 1968 and the civic rights movement (Caren et al. 2011; Grasso 2014), others suggest that this form of participation has been continuously expanding among younger cohorts (Quaranta 2015).
+- Scholars have also wondered whether extra-parliamentary forms of participation has complemented or supplanted conventional forms of participation. The growing consensus is that both forms of participation are used complementarily (Rafail and Freitas 2017). We should therefore talk of an expansion rather than a shift of political participation.
+
+## Gap
+
+- So far, few studies have looked specifically at the political participation of Millennials and compared it to those of other generations.
+- Are Millennials an apathetic generation, as some have claimed?
+- Have they abandoned traditional forms of participation? Or are they combining electoral and nonelectoral participation?
+- And what is the participation of Millennials telling us about the possible future of representative democracy?
+
+## Methods
+
+- We look at the volume and modes of participation of Millennials (born after 1985) compared to Baby boomers (born between 1955 and 1969) and the Generation X (born between 1970 and 1984) in Germany.
+- Data:
+    - We use data from eight biennial rounds of the European Social Survey conducted between 2002 [2003?] and 2016 [2017?].
+- Dependent variables:
+    - The ESS asked respondents whether they had engaged in various forms of political participation in the 12 months preceding each of the survey rounds.
+    - We compare the participation of Millennials in [XX] activities and compare it to those of Boomers and Xers: [List items].
+    - We also look at the evolution of political interest among the three generations.
+
+## Findings
+
+- In general, Millennials are less active in electoral forms of participation.
+    - [List averages]
+- With regards to extra-parliamentary participation, Millennials are more active in demonstrations but not in other activities [?].
+    - [List averages]
+- Looking at these results, it might be tempting to argue that Millennials are disengaged [except for participation in demonstrations].
+- However, we know that political participation is highly correlated with age. The low participation of Millennials might simply be related to life-cycle effects.
+- What is more interesting is to compare the participation of certain generations at the same age. With a coverage of 16 years, we are limited, but we can still compare the participation of Millennials and Xers.
+- Looking at political interest – one of the best predictors for any type of participation – we see that Millennials were actually more interested in politics than Xers at the same age.
+    - Caveat: Only for the age group 25-30
+    - [Show figure]
+- The same is true for party identification.
+- In other words, if the participation of Millennials follows the same age trend as previous generations, we can expect them to actually boost overall participation in Germany.
+- This remains however speculative and we will have to continue tracking the political involvement of Millennials over the next years.
+
+## Conclusion
+
+- [Normative considerations] Democracies benefit from engaged citizens. Political participation helps to monitor the activities of governing elites and improves political representation.
+- Recently, many people have been wondering whether Millennials would change the face of political participation in Germany.
+- Our results show that Millennials do not participate in a radically different way than Baby boomers and Xers.
+- They are usually a bit less active, except in demonstrations.
+- Yet, these results might be linked to an age effect.
+- Millennials are actually more interested in politics than Xers at the same age.
+- Therefore, if they continue on this trajectory, they might actually contribute to an increase in the overall level of participation in Germany.
+- That’s good news at the time when the republic is faced with many challenges [list some].
+- It will be interesting to follow the political participation of Millennials as they reach adulthood [what was the concept again?]: settle down in stable jobs, pay taxes, raise families, and interact more with the welfare state.
