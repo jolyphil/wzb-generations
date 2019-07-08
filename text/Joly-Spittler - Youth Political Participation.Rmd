@@ -2,8 +2,22 @@
 title: "Youth Political Participation"
 author: "Philippe Joly and Marcus Spittler"
 date: "6/28/2019"
-output: word_document
+output: html_document
 ---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = "..")
+```
+
+```{r load_packages, message = FALSE}
+library(dplyr) # Data wrangling
+library(kableExtra) # Export tables
+```
+
+```{r load_data}
+ess <- readRDS("data/ess.rds")
+```
 
 # Millennials: Changing the Face of Political Participation in Germany?
 
@@ -66,7 +80,31 @@ output: word_document
 
 ## Findings
 
-- In general, Millennials are less active in electoral forms of participation.
+```{r collapse}
+ess_gr <- ess %>%
+  filter(!is.na(generation)) %>%
+  group_by(generation) %>%
+  summarize_at(vars(polintr,
+                    vote,
+                    contplt,
+                    wrkprty,
+                    wrkorg,
+                    badge,
+                    sgnptit,
+                    pbldmn,
+                    bctprd,
+                    clsprty), 
+               ~weighted.mean(., dweight,  na.rm = T ))
+```
+
+
+```{r export_table_averages}
+ess_gr %>% 
+  kable() %>%
+  kable_styling()
+```
+
+- In general, Millennials are less active in electoral forms of participation [?].
     - [List averages]
 - With regards to extra-parliamentary participation, Millennials are more active in demonstrations but not in other activities [?].
     - [List averages]
