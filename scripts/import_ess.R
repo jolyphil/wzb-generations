@@ -97,6 +97,68 @@ for (i in 1:8) {
 rm(round_i, i)
 
 # ______________________________________________________________________________
+# Recode variables ====
+
+# _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+# Generations ----
+
+var_levels <- c("Boomer", "Xer", "Millennial")
+
+ess <- ess %>%
+  mutate(generation = case_when(yrbrn >= 1955 & yrbrn <= 1969 ~ "Boomer",
+                                yrbrn >= 1970 & yrbrn <= 1984 ~ "Xer",
+                                yrbrn >= 1985 ~ "Millennial"),
+         generation = factor(generation, levels = var_levels))
+
+# _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+# Age at date of interview ----
+# 
+ess <- ess %>% 
+  mutate(age_doi = year - yrbrn)
+
+# _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+# Political interest ----
+
+# Original code: 1	Very interested
+#                2	Quite interested
+#                3	Hardly interested
+#                4	Not at all interested
+#                7	Refusal
+#                8	Don't know
+#                9	No answer
+
+ess <- ess %>%
+  mutate(polintr = case_when(polintr %in% c(1,2) ~ 1,
+                             polintr %in% c(3,4) ~ 0))
+
+# _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+# Political participation ----
+
+# Original code: 1	Yes
+#                2	No
+#                7	Refusal
+#                8	Don't know
+#                9	No answer
+
+recode_participation_var <- function(var) {
+  r <- case_when(var == 1 ~ 1,
+                 var == 2 ~ 0)
+  return(r)
+}
+
+ess <- ess %>%
+  mutate_at(vars(vote,
+                 contplt,
+                 wrkprty,
+                 wrkorg,
+                 badge,
+                 sgnptit,
+                 pbldmn,
+                 bctprd,
+                 clsprty), 
+            recode_participation_var)
+
+# ______________________________________________________________________________
 # Save ESS data ====
 
 ess %>% 
