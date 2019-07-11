@@ -12,6 +12,7 @@ knitr::opts_knit$set(root.dir = "..")
 
 ```{r load_packages, message = FALSE}
 library(dplyr) # Data wrangling
+library(ggplot2) # Graphs
 library(kableExtra) # Export tables
 ```
 
@@ -117,6 +118,27 @@ ess_gr %>%
 - The same is true for party identification.
 - In other words, if the participation of Millennials follows the same age trend as previous generations, we can expect them to actually boost overall participation in Germany.
 - This remains however speculative and we will have to continue tracking the political involvement of Millennials over the next years.
+
+```{r generate_graph}
+
+# Sum number of activities
+ess %>%
+  filter(!is.na(generation) & 
+           !is.na(contplt) & 
+           !is.na(wrkprty) &
+           !is.na(wrkorg) &
+           !is.na(sgnptit) &
+           !is.na(pbldmn) &
+           !is.na(bctprd)) %>%
+  mutate(sumpolpart = contplt + wrkprty + wrkorg + sgnptit + pbldmn + bctprd) %>%
+  ggplot(aes(
+    x = age_doi, y = sumpolpart, group = generation, color = generation)) + 
+  geom_smooth(method = 'loess', formula = 'y ~ x') +
+  labs(x = "Age at date of interview",
+       y = "Number of political activities"
+    )
+
+```
 
 ## Conclusion
 
