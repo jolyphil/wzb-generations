@@ -50,7 +50,27 @@ ess <- readRDS("data/ess.rds")
     - We compare the repertoire of political participation of Millennials with those of Baby boomers and Xers in Germany using data of the European Social Survey collected from 2002 [2003?] to 2016 [2017?].
     - We show that Millennials are in general less active than the older generations, but this lower level of engagement might be an artifact of an age effect: Millennials are sometimes more mobilized, in certain forms of political participation, than Xers were at the same age.
 
-## Literature Review
+## Millenials and changing political participation in Western Europe
+
+To understand how Millennials get involve into politics, we need to take a step back and consider longterm dynamics in political participation.
+
+According to the literature, two important trends have characterized the evolution of political participation in Western Europe over the last decades. 
+
+First, we observe **a decline in vote turnout** since the second world war in most western democracies. The decline in electoral participation is affecting all age groups, but even more so the youngest ones. In Germany, vote turnout for federal elections reached its peak in 1972, at 91.1% (in West Germany), and its low point in 2009, at 70,8%.
+
+Second, the literature suggests there has been **a rise in extra-parliamentary forms of participation** since the 1960s. These include political actions like signing petitions, joining in boycotts, or taking part in demonstrations. These forms of political participation are not directly linked to the electoral process (although they might be). 
+
+Scholars have been debating whether these trends are attributable to period or cohort effects.
+
+Partisans of the period model argue that... [add arguments here]
+
+Partisans of the cohort model argue that... [add arguments here]
+
+Unfortunately, we might never be able to determine what from the period or cohort effects is driving the longterm trends in political participation. Separating age, period, and cohort (APC) effects poses a statistical problem... [introduce methodological considerations here]
+
+In spite of these methodological diffulties, it is surprising that not more scholars have looked at the political participation of Millenials... [Move to gap here].
+
+_Notes:_
 
 - Measuring generational differences in political participation (or, actually, any type of generational difference) presents a certain number of challenges.
 - Because age is perfectly explained by cohort and period (just subtract the first to the second), this creates a statistical identification problem that has been tormenting social scientists for decades. No statistical solution allows for the perfect separation of the age, period, and cohort effects. Scholars can either leave one of the three terms aside or come up with approximate estimations. That’s why we need to be extremely careful when analyzing results of research postulating the presence of generational effects.
@@ -64,12 +84,16 @@ ess <- readRDS("data/ess.rds")
 
 ## Gap
 
+[Here, refer to the two longterm trends in political participation (lower vote turnout and rise in unconventional participation) and ask whether Millennials are following the trend or taking a distinct course.]
+
 - So far, few studies have looked specifically at the political participation of Millennials and compared it to those of other generations.
 - Are Millennials an apathetic generation, as some have claimed?
 - Have they abandoned traditional forms of participation? Or are they combining electoral and nonelectoral participation?
 - And what is the participation of Millennials telling us about the possible future of representative democracy?
 
 ## Methods
+
+[Also, add some rough descriptive data from the Bundeswahlleiter.]
 
 - We look at the volume and modes of participation of Millennials (born after 1985) compared to Baby boomers (born between 1955 and 1969) and the Generation X (born between 1970 and 1984) in Germany.
 - Data:
@@ -104,6 +128,8 @@ ess_gr %>%
   kable() %>%
   kable_styling()
 ```
+
+[Also, add some rough descriptive data from the Bundeswahlleiter. Apparently, there has been a rise in turnout in 2013 and 2017. Young people are participating _more_ than they use to.]
 
 - In general, Millennials are less active in electoral forms of participation [?].
     - [List averages]
