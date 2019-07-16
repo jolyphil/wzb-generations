@@ -52,44 +52,12 @@ ess <- readRDS("data/ess.rds")
 
 ## Millenials and changing political participation in Western Europe
 
-To understand how Millennials get involve into politics, we need to take a step back and consider longterm dynamics in political participation.
+To understand how Millennials get involve into politics, we need to take a step back and consider long-term dynamics of political participation. According to the literature, two important trends have characterized the evolution of political participation in Western Europe over the last decades. First, we observe **a decline in voter turnout** since the Second World War. The decline in electoral participation is affecting all age groups, but even more so the youngest ones. In Germany, voter turnout for federal elections reached its peak in 1972, at 91.1% (in West Germany), and its low point in 2009, at 70.8%. Second, data from repeated, nationally-representative surveys suggest there has been **a rise in extra-parliamentary forms of participation** since the 1970s. These forms of participation include activities such as signing petitions, joining in boycotts, or taking part in demonstrations. These political actions are not directly linked to the electoral process (although they might be). Participants join more spontaneously and do not have to be involved in hierarchical organizations like parties or labor unions.
 
-According to the literature, two important trends have characterized the evolution of political participation in Western Europe over the last decades. 
+Scholars have been debating whether these trends are attributable to period or cohort effects. Period effects might result from technological evolution, a growing acceptance by authorities for alternative forms of participation, a greater institutionalization of social movement organizations, and transformations of post-industrial economies characterized by an expanding service sector and the diffusion of post-secondary education. Cohort (or generational) effects might result from processes of political socialization through which young citizens would have adopted a distinct set of attitudes and developed particular ways of participating in politics. Some authors argue that younger, postmaterialistic cohorts increasingly value autonomy and self-expression, which leads them to embrace elite-challenging forms of participation. Unfortunately, we might never be able to determine with certainty what from period or cohort effects is driving these long-term trends in political participation. Indeed, separating age, period, and cohort (APC) effects poses a statistical problem: age is perfectly explained by cohort and period (simply subtract the year of birth from the measurement year). No statistical solution allows for the perfect separation of the age, period, and cohort effects. This does not mean that scholars should completely avoid comparing the political behavior of generations. By constraining one of the three terms of the APC equation, informed estimations about the nature of social change can still be made.
 
-First, we observe **a decline in vote turnout** since the Second World War. The decline in electoral participation is affecting all age groups, but even more so the youngest ones. In Germany, vote turnout for federal elections reached its peak in 1972, at 91.1% (in West Germany), and its low point in 2009, at 70.8%.
+Despite the inherent challenges associated with generational analysis, it is surprising that so few studies have examined the political participation of Millennials. Most studies that have looked at the decline in voter turnout and the expansion of extra-parliamentary participation were conducted in the 1990s and beginning of the 2000s. Citizens of Generation X, not the Millennials, were the “young” at that time. How are Millennials participating in politics? Are they simply pursuing the same old trends observed before; voting less, but getting involved in extra-parliamentary forms of political participation? What is the participation of Millennials telling us about the possible future of representative democracy?
 
-Second, the literature suggests there has been **a rise in extra-parliamentary forms of participation** since the 1960s. These include political actions such as signing petitions, joining in boycotts, or taking part in demonstrations. These forms of political participation are not directly linked to the electoral process (although they might be). 
-
-Scholars have been debating whether these trends are attributable to period or cohort effects. 
-
-Period effects could result from technological evolution, a growing acceptance by authorities for alternative forms of participation, a greater institutionalization of social movement organizations, and transformations of post-industrial economies characterized by an expanding service sector and the diffusion of post-secondary education. 
-
-Cohort effects, in contrast, are not the product of a more favorable context for protest, but result from processes of political socialization through which young citizens have adopted a distinct set of attitudes and behavior: younger cohorts appear to be more postmaterialistic and they increasingly value self-expression, which leads them to embrace elite-challenging forms of participation.
-
-Unfortunately, we might never be able to determine what from the period or cohort effects is driving the longterm trends in political participation. Indeed, separating age, period, and cohort (APC) effects poses a statistical problem... [introduce methodological considerations here]
-
-In spite of these methodological diffulties, it is surprising that not more scholars have looked at the political participation of Millenials... [Move to gap here].
-
-_Notes:_
-
-- Measuring generational differences in political participation (or, actually, any type of generational difference) presents a certain number of challenges.
-- Because age is perfectly explained by cohort and period (just subtract the first to the second), this creates a statistical identification problem that has been tormenting social scientists for decades. No statistical solution allows for the perfect separation of the age, period, and cohort effects. Scholars can either leave one of the three terms aside or come up with approximate estimations. That’s why we need to be extremely careful when analyzing results of research postulating the presence of generational effects.
-- A generational analysis also requires data to be collected over a long period of time: we need to track multiple cohorts at different ages and points in time. In the field of political participation, the first repeated, nationally-representative surveys go back to the 1970s and became more systematic in the 1980s. This leaves us with a relatively short coverage to assess the evolution political behavior across generations and time.
-- On the basis of these repeated surveys, most authors now agree that there has been a rise in extra-parliamentary forms of participation over the past decades in Western Europe and North America. This includes political actions like signing petitions, joining in boycotts, or taking part in demonstrations. These forms of political participation are not directly linked (although they might be) to the electoral process.
-- Authors have been debating whether this change in political participation is driven by a period or a cohort effect.
-- Partisans of the period theory suggest that changes in the repertoire of political participation are linked to technological evolution, the transformation of post-industrial economies, the rise of new cleavages and new political issues centered on a third generation of human rights (right to the environment, LGBT rights, etc.).
-- Partisans of the cohort theory argue that young citizens, through political socialization, have adopted a distinct set of attitudes and behavior: they appear to be more postmaterialistic and they increasingly value self-expression, which leads them to embrace elite-challenging forms of participation.
-- The empirical evidence for a period or a cohort effect on political participation in Western democracies remains mixed. While some argue that, in the US and Western Europe, the highest involvement in extra-parliamentary forms of participation is among the cohort of people who grew up with the events of 1968 and the civic rights movement (Caren et al. 2011; Grasso 2014), others suggest that this form of participation has been continuously expanding among younger cohorts (Quaranta 2015).
-- Scholars have also wondered whether extra-parliamentary forms of participation has complemented or supplanted conventional forms of participation. The growing consensus is that both forms of participation are used complementarily (Rafail and Freitas 2017). We should therefore talk of an expansion rather than a shift of political participation.
-
-## Gap
-
-[Here, refer to the two longterm trends in political participation (lower vote turnout and rise in unconventional participation) and ask whether Millennials are following the trend or taking a distinct course.]
-
-- So far, few studies have looked specifically at the political participation of Millennials and compared it to those of other generations.
-- Are Millennials an apathetic generation, as some have claimed?
-- Have they abandoned traditional forms of participation? Or are they combining electoral and nonelectoral participation?
-- And what is the participation of Millennials telling us about the possible future of representative democracy?
 
 ## Methods
 
@@ -128,6 +96,20 @@ ess_gr %>%
   kable() %>%
   kable_styling()
 ```
+
+We start by considering the voter turnout of Millennials. 
+
+* Voter turnout reached its lowest point in 2009. By then the oldest Millienials were 24 years old.
+* Voter turnout increased in 2013 and again in 2017. In 2017, the oldest Millenials were then 32.
+* Voter turnout increased for most age groups. 
+* Youngest citizens are always participating the least. 
+* But, interestingly the **gap** between the most involved age group [60–69] and the least one [21-24] declined from 20.6 % to 14 %. 
+* So clearly the decline in voter turn out has stopped, even among the youngest citizens.
+
+
+https://www.bundeswahlleiter.de/dam/jcr/e0d2b01f-32ff-40f0-ba9f-50b5f761bb22/btw17_heft4.pdf
+
+
 
 [Also, add some rough descriptive data from the Bundeswahlleiter. Apparently, there has been a rise in turnout in 2013 and 2017. Young people are participating _more_ than they use to.]
 
