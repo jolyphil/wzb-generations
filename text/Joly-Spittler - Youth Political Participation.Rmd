@@ -4,6 +4,8 @@ author: "Philippe Joly and Marcus Spittler"
 date: "6/28/2019"
 output:
   word_document: default
+  pdf_document:
+    dev: cairo_pdf
 nocite: |
   @dalton_good_2015, @grasso_generations_2016, @norris_democratic_2002
 bibliography: ref.bib
@@ -113,6 +115,27 @@ All three generations tend to participate more as they get older, but each of th
 
 
 ```{r generate_graph, echo=FALSE, message=F}
+# Load WZB Dahrendorf font into R - Install font in Windows first
+windowsFonts(dahrendorf = windowsFont("Dahrendorf"))
+
+# Add translation and set language
+giveText <- function( whichText, language = "EN"){
+  switch(language, 
+    EN = switch(whichText,
+      title = "Political participation by generation and age",
+      x = "Age at date of interview",
+      y = "Predicted number of political activities",
+      source = "Source: European Social Survey (www.europeansocialsurvey.org)"
+    ), 
+    DE = switch(whichText,
+      title = "Politische Beteiligung nach Generation und Alter",
+      x = "Alter zum Befragungszeitpunkt",
+      y = "Vorhergesagte Anzahl politischer Aktivitäten",
+      source = "Quelle: European Social Survey (www.europeansocialsurvey.org)"
+    )
+  )
+}
+language <- "DE" # or "DE"
 
 # Sum number of activities
 ess %>%
@@ -126,21 +149,42 @@ ess %>%
   mutate(sumpolpart = contplt + wrkprty + wrkorg + sgnptit + pbldmn +
          bctprd) %>%
   mutate(generation = factor(generation, 
-                             levels=rev(levels(generation)))) %>%
+                             levels=rev(levels(generation)))) %>% 
+  #filter(age_doi >= 18) %>%                                                      
   ggplot(aes(
     x = age_doi, y = sumpolpart, group = generation, color = generation, weight = dweight)) + 
   geom_smooth(method = 'loess', formula = 'y ~ x') +
-  ggtitle("Political participation by generation and age") +
-  labs(x = "Age at date of interview",
-       y = "Predicted number of political activities",
-       caption = "Source: European Social Survey (www.europeansocialsurvey.org)") +
-  scale_color_discrete(name="",
-                     labels = c("Millennials (1985-...)",
-                                "Xers (1970-84)", 
-                                "Boomers (1955-69)")) +
-  theme(legend.position = "bottom")
+  ggtitle(giveText("title", language)) +
+  labs(x = giveText("x", language),
+       y = giveText("y", language),
+       caption = giveText("source", language)) +
+  scale_x_continuous(breaks = seq(15,65,5)) +
+  scale_y_continuous(
+    breaks = seq(0,2,.5), 
+    labels = scales::comma(seq(0,2,.5), accuracy = .1, big.mark = "",
+      decimal.mark = ifelse(language == "DE", ",", "."))) + 
+  scale_color_manual(
+    values = c("#c7007e", "#f39100", "#0081b6"),
+    name = "",
+    labels = c("Millennials (1985-2000)", # Should this not be 2000?
+               "Xers (1970-84)", 
+               "Boomers (1955-69)")
+  ) +
+  coord_cartesian(ylim = c(0,2), expand = TRUE) +
+  theme(
+    text = element_text(family = "dahrendorf"),
+    plot.background = element_rect(color = "#d9dada", fill = "#d9dada"),
+    panel.background = element_rect(fill = "#d9dada"),
+    panel.grid.minor = element_blank(),
+    axis.ticks = element_blank(),
+    legend.background = element_rect(fill = "#d9dada"),
+    legend.key = element_rect(color = "#d9dada"),
+    legend.position = "bottom"
+  )
 
-ggsave("figures/number_activities_age_doi.png")
+ggsave("figures/number_activities_age_doi.pdf", device = cairo_pdf,
+       width = 20, height = 20/1.35, 
+       dpi = 600, units = "cm")
 
 ```
 
