@@ -135,7 +135,7 @@ giveText <- function( whichText, language = "EN"){
     )
   )
 }
-language <- "DE" # or "DE"
+language <- "EN" # or "DE"
 
 # Sum number of activities
 ess %>%
@@ -182,8 +182,8 @@ ess %>%
     legend.position = "bottom"
   )
 
-ggsave("figures/number_activities_age_doi.pdf", device = cairo_pdf,
-       width = 20, height = 20/1.35, 
+ggsave(paste0("figures/number_activities_age_doi_", language,".pdf"), 
+       device = cairo_pdf, width = 19, height = 19/1.35, 
        dpi = 600, units = "cm")
 
 ```
