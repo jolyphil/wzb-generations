@@ -3,8 +3,7 @@
 .RData
 .Ruserdata
 *.rds
-*.pdf
 *.png
 *.dta
-*.docx
 *.html
+/figures
