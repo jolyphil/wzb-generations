@@ -3,12 +3,12 @@ title: 'Millennials: Changing the Face of Political Participation in Germany?'
 author: "Philippe Joly and Marcus Spittler"
 date: "6/28/2019"
 output:
-  html_document:
-    df_print: paged
   pdf_document:
     dev: cairo_pdf
   word_document:
     reference_docx: word-style.docx
+  html_document:
+    df_print: paged
 nocite: |
   @dalton_good_2015, @grasso_generations_2016, @norris_democratic_2002
 bibliography: ref.bib
@@ -55,11 +55,13 @@ yrbrn_max <- ess %>%
   max()
 ```
 
+> Millenials, born between 1985 and 2000, are often critized for being self-serving and little interested in politics. We examine the political participation of the Millenial generation in comparison to Generation X and Boomers in Germany. We find that Millennials participate today more than the Generation X at the age of twenty and, if the current trend persists, they will participate more than Boomers did during their thirties. Therefore, Millenials might actually contribute to an increasing level of participation in Germany.
+
 # Introduction
 
-What kind of attributions the generation of the _Millennials_ was supposed to listen to: Lethargically they are, self-serving, with little interested in politics. The Time Magazine even titled "The Me Me Me Generation". Since 2018, at the latest, Millennials, born between 1985 and 2000, seem to have proven the opposite: not only digital politics, but also climate protection brings numerous young people, led by the Swedish Greta Thunberg, every week to the streets under the motto "Fridays for Future". And this also against quite considerable criticism from older people. Further, the latest European election have shown a considerable gap between the political preferences of younger and older age groups, especially in Germany. These developments have sparked a new interest – in academia and in the wider public alike – for the political participation of young citizens.
+Millenials are often critized for being self-serving and little interested in politics. The Time Magazine even called them the "Me Me Me Generation". Over the recent years, however, Millennials, born between 1985 and 2000, have proven the opposite. Not only digital politics, but also climate protection brings numerous young people every week to the streets under the motto "Fridays for Future", and this despite considerable criticism from older people. The last European elections have also shown a considerable gap between the political preferences of younger and older age groups, especially in Germany. These developments have sparked a new interest – in academia and in the wider public alike – for the political participation of young citizens.
 
-In this article we compare the political participation of Millennials with those of Baby boomers (born between 1955 and 1969) and the Generation X (_Xers_, born between 1970 and 1984) in Germany, taking into account the methodological difficulties associated with this type of research. We will show, how exactly Millennials are engaging in politics and whether they are participating more or less in comparison to older generations.
+In this article we compare the political participation of Millennials with those of Baby boomers (born between 1955 and 1969) and the Generation X (_Xers_, born between 1970 and 1984) in Germany while taking into account the methodological difficulties associated with this type of research. We examine how exactly Millennials are engaging in politics and whether they are participating more or less in comparison to older generations.
 
 # Changing Political Participation in Western Europe
 
@@ -80,6 +82,7 @@ We look here at the volume and modes of participation of Millennials compared to
 ```{r collapse, include=FALSE}
 ess_gr <- ess %>%
   filter(!is.na(generation)) %>%
+  filter(age_doi >= 16) %>%
   group_by(generation) %>%
   summarize_at(vars(polintr,
                     vote,
@@ -112,7 +115,9 @@ All three generations tend to participate more as they get older, but each of th
 
 ```{r generate_graph, echo=FALSE, message=F}
 # Load WZB Dahrendorf font into R - Install font in Windows first
-windowsFonts(dahrendorf = windowsFont("Dahrendorf"))
+if(Sys.info() %>% {stringr::str_detect(tolower(.), "windows" )} %>% any()){
+  windowsFonts(dahrendorf = windowsFont("Dahrendorf"))
+}
 
 # Add translation and set language
 giveText <- function( whichText, language = "EN"){
@@ -146,7 +151,7 @@ ess %>%
          bctprd) %>%
   mutate(generation = factor(generation,
                              levels=rev(levels(generation)))) %>%
-  #filter(age_doi >= 18) %>%                                                      
+  filter(age_doi >= 16) %>%                                                      
   ggplot(aes(
     x = age_doi, y = sumpolpart, group = generation, color = generation, weight = dweight)) +
   geom_smooth(method = 'loess', formula = 'y ~ x') +
@@ -154,7 +159,7 @@ ess %>%
   labs(x = giveText("x", language),
        y = giveText("y", language),
        caption = giveText("source", language)) +
-  scale_x_continuous(breaks = seq(15,65,5)) +
+  scale_x_continuous(breaks = c(16, seq(20,65,5))) +
   scale_y_continuous(
     breaks = seq(0,2,.5),
     labels = scales::comma(seq(0,2,.5), accuracy = .1, big.mark = "",
@@ -186,12 +191,18 @@ ggsave(paste0("text/number_activities_age_doi_", language,".pdf"),
 
 # Conclusions
 
-Our analysis has shown that Millennials are in general less active than the older generations, but this lower level of engagement might be an artifact of an age effect: On average we can say that Millennials participate today more than Xers during their twenties and if the current trend persists, they will participate more than Boomers did during their thirties. Millennials are in fact more mobilized than Xers were at the same age and do not participate in a radically different way. Therefore, they might actually contribute to an increase in the overall level of participation in Germany. That’s good news for democracy, as political participation is an important indicator for a functioning input-dimension of the political system. High levels of participation define also democratic quality and the legitimacy a democratic state can claim for itself.
+Our analysis has shown that Millennials are, in general, less active than the older generations, but this lower level of engagement might be an artifact of an age effect: On average, we can say that Millennials participate today more than Xers during their twenties and, if the current trend persists, they will participate more than Boomers did during their thirties. Millennials are in fact more mobilized than Xers were at the same age and do not participate in a radically different way. Therefore, they might actually contribute to an increase in the overall level of participation in Germany. That’s good news for democracy, as political participation is a clear indicator that the input-dimension of the political system is functioning. High levels of participation also improve democratic quality and the legitimacy a democracy can claim for itself.
 
-Two aspects were left open in this contribution: First, did the invention of the world wide web impact on the political repertoire of Millennials in a different way then on older generations, and is online participation supplementing or substituting other forms of participation? Second, what happens with Millennials' political engagement when they transition further adulthood, settle down in stable jobs, pay taxes, raise families, and interact more with the welfare state. Will they keep up on the current high level?
+Two aspects were left open in this contribution: First, how did the invention of the World Wide Web affect the political repertoire of Millennials in comparison to older generations, and is online participation supplementing or substituting other forms of participation? Second, what will happen with Millennials' political engagement when they transition further into adulthood, settle down in stable jobs, pay taxes, raise families, and interact more with the welfare state. Will they keep on participating at this level?
 
 # Notes
 1. The ESS 1 fieldwork was conducted between 20.11.02 and 16.05.03; the ESS 8 fieldwork, between 23.08.16 and 26.03.17. We use a sample of `r samplesize` respondents born between `r yrbrn_min` and `r yrbrn_max`.
 2. See Bundeswahlleiter, 2018, "Wahl zum 19. deutschen Bundestag am 24. September 2017. Heft 4: Wahlbeteiligung und Stimmabgabe der Frauen und Männer nach Altersgruppen", https://www.bundeswahlleiter.de/dam/jcr/e0d2b01f-32ff-40f0-ba9f-50b5f761bb22/btw17_heft4.pdf
+
+# Authors
+
+_Philippe Joly_ is a research fellow in the research unit Democracy and Democratization and a doctoral candidate at Humboldt University. His areas of specialization are political participation, social movements, and democratization. His PhD thesis examines the effect of political socialization on the development of political protest in new democracies, especially in the context of post-communist transformations.
+
+_Marcus Spittler_ is a research fellow in the research unit Democracy and Democratization since 2015. Before he worked at the Electoral Integrity Project at the University of Sydney. His areas of research are in comparative politics and electoral behavior, while his PhD thesis focuses on the effect of populism on Democracy from an empirical perspective.
 
 # Further reading
