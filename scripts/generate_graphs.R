@@ -98,7 +98,7 @@ plot_agedoi_freq <- function(.data, value, fname = "agedoi"){
     count(!!values, wt = dweight) %>%
     filter(!is.na(!!values)) %>% 
     mutate(f = n/sum(n)) %>% 
-    # Remove when to few cases
+    # Remove when too few cases
     filter(!(sum(n) < 30)) %>%
     # Clean
     filter(!!values == 1) %>% 
