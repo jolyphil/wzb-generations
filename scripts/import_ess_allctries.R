@@ -50,7 +50,6 @@ c <-
     recode_participation_var
   )
 
-
 # Reduce country list ---------------------------------------------------------------
 d <-  
   c %>% right_join(
@@ -58,14 +57,17 @@ d <-
     cntry = c(
       c("AT", "BE", "DE", "DK", "ES", "FI", "FR", "GB", "GR", "IE", "IT",
         "NL", "PT", "SE",
-        "CZ", "BG", "EE", "HR", "HU", "LT", "LV", "PL", "RO", "SI", "SK")
+        "CZ", "BG", "HR", "HU", "LT", "PL", "SI", "SK")
+      # EE, LV, and RO removed due to missing data in weights
     ),
-    western_europe = c(rep(1, 14), rep(0, 11))
+    western_europe = c(rep(1, 14), rep(0, 8))
   ) %>% 
   mutate(cname_en = countrycode::countrycode(cntry, "iso2c", "country.name")),.,
   by = "cntry") %>% 
   filter(!is.na(cname_en))
 
+# Country fluctuation
+d %>% group_by(cname_en) %>% count(essround) %>% select(-n) %>% {table(.$essround)}
 
 # Save ------------------------------------------------------------------------------
 d %>% saveRDS(file.path("data", "ess_allctries.rds"))
