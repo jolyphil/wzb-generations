@@ -38,9 +38,9 @@ ess_gr <-
                     bctprd,
                     clsprty), 
                ~weighted.mean(., dweight,  na.rm = T )) %>% 
-  mutate(year = round(year)) %>% 
   group_by(essround, generation) %>% 
-  select(-cname_en) %>% dplyr::summarize_all(mean, na.rm = TRUE)
+  select(-cname_en) %>% dplyr::summarize_all(mean, na.rm = TRUE) %>% 
+  mutate(year = round(year,0))
 # ______________________________________________________________________________
 # Graphs ====
 
