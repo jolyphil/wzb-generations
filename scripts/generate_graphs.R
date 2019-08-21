@@ -12,15 +12,20 @@ library(scales)
 # ______________________________________________________________________________
 # Load data ====
 
-ess <- readRDS("data/ess.rds")
-allbus <- readRDS("./data/allbus-reduced.rds")
+#ess <- readRDS("data/ess.rds")
+ess_allctries <- readRDS("data/ess_allctries.rds")
+#allbus <- readRDS("./data/allbus-reduced.rds")
+
+ess <- ess_allctries %>% 
+  filter(!is.na(dweight) & !is.na(year)) #%>% 
+  #filter(western_europe == 1)
 
 # ______________________________________________________________________________
 # Collapse at the generation-round ====
-
-ess_gr <- ess %>%
+ess_gr <-
+ ess %>%
   filter(!is.na(generation)) %>%
-  group_by(essround, generation) %>%
+  group_by(essround, cname_en, generation) %>%
   summarize_at(vars(year,
                     polintr,
                     vote,
@@ -33,8 +38,9 @@ ess_gr <- ess %>%
                     bctprd,
                     clsprty), 
                ~weighted.mean(., dweight,  na.rm = T )) %>% 
-  mutate(year = round(year))
-
+  mutate(year = round(year)) %>% 
+  group_by(essround, generation) %>% 
+  select(-cname_en) %>% dplyr::summarize_all(mean, na.rm = TRUE)
 # ______________________________________________________________________________
 # Graphs ====
 
@@ -78,8 +84,8 @@ plot_regular_freq <- function(.data, varname , label){
     geom_point(aes(color = generation), size = 3) +
     scale_x_continuous(
       name = NULL,
-      limits = c(2003,2016),
-      breaks = c(2003, seq(2004,2016,2))
+      limits = c(2002,2016),
+      breaks = c(seq(2002,2016,2))
     ) +
     scale_y_continuous(
       name = "Share in generation (in %)", limits = c(0, ceiling(max(gd$var)*100)),
@@ -89,7 +95,7 @@ plot_regular_freq <- function(.data, varname , label){
       values = rev(wesanderson::wes_palette("Darjeeling1",3)),
       labels = c("Baby boomers (1955-69)", "Generation X (1970-84)", "Millennials (1985-2000)")
     ) +
-    labs(title = label, subtitle = "European Social Survey (2003-2016)", color = "Generation:") +
+    labs(title = label, subtitle = "European Social Survey (2002-2016)", color = "Generation:") +
     theme_bw() +
     theme(
       text = element_text(family = "Crimson", size = 12),
@@ -117,36 +123,33 @@ plot_agedoi_freq <- function(.data, value, label, fname = "agedoi"){
   .data %>% 
     filter(!is.na(generation)) %>%
     # Compute weighted means
-    group_by(generation, age_doi) %>% 
+    group_by(cname_en, generation, age_doi) %>%
     count(!!values, wt = dweight) %>%
-    filter(!is.na(!!values)) %>%
-    mutate(f = n/sum(n)*100) %>%
-    # Remove when too few cases
-    filter(!(sum(n) < 30)) %>%
-    # Clean
+    filter(!is.na(!!values)) %>% 
+    mutate(f = n/sum(n)) %>%
     filter(!!values == 1) %>%
-    select(-n, -!!values) %>% 
+    group_by(generation, age_doi) %>%
+    summarize(f = mean(f)*100) %>%
+    filter(age_doi > 15) %>% 
     # Generate plot
     ggplot(aes(
       x = age_doi, y = f,
-      group = rev(generation), color = rev(generation)
+      group = generation, color = (generation)
     )) +
     geom_point() +
-    geom_smooth(method = 'loess', formula = 'y ~ x', se = FALSE) +
+    geom_smooth(method = 'loess', formula = 'y ~ x', se = TRUE) +
     scale_x_continuous(breaks = c(16,seq(20,60,10))) +
     scale_y_continuous(
       limits = c(0, NA),
       breaks = pretty_breaks()
     ) +
     scale_color_discrete(
-      labels = c("Millennials (1985-2000)", 
-                 "Generation X (1970-84)",
-                 "Boomers (1955-69)")
+      labels = c("Boomers (1955-69)", "Generation X (1970-84)", "Millennials (1985-2000)")
     ) +
     coord_cartesian(xlim = c(16,60), expand = TRUE) +
     xlab("Age at date of interview") + ylab("Share in generation (in %)") +
     labs(
-      title = label, subtitle = "European Social Survey (2003-2016)",
+      title = label, subtitle = "European Social Survey (2002-2016)",
       color = "Generation:"
     ) +
     theme_bw() +
