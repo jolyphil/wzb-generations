@@ -4,17 +4,28 @@ library(essurvey) # Downloads main ESS datafiles
 # Import all rounds -----------------------------------------------------------------
 a <- import_all_rounds("ess@byom.de") # <-- Replace: your email has to be registred
 
+ownR::getCodebook(a[[1]]) %>% View()
+
 # Limit variables and combine dataset -----------------------------------------------
 b <- 
   a %>% 
   purrr::map(
-    ~select(.x, essround, idno, matches("inwyys"), matches("inwyr"),
+    ~select(.x, essround, idno, matches("inwyys"), matches("inwyr"), 
+            trstprl, trstlgl, trstplc, trstplt, trstep, trstun, 
             cntry, dweight, polintr, vote, contplt, wrkprty, 
       wrkorg, badge, sgnptit, pbldmn, bctprd, clsprty, lrscale, stfdem, yrbrn, gndr,
-      eisced, mnactic, mbtru, domicil, brncntr, intewde)
+      eisced, mnactic, mbtru, domicil, brncntr)
   ) %>% 
-  purrr::map(recode_missings) %>% 
-  bind_rows()
+  purrr::map(essurvey::recode_missings) 
+
+# Adjust trust variables in ESS9 from factor to numeric and minus 1
+b <- bind_rows(
+  b[1:8], 
+  b[[9]] %>% 
+    mutate_if(is.factor, as.numeric) %>%
+    mutate_at(vars(matches("trst")), function(x) x -1)
+  )
+
 
 # Recode variables ------------------------------------------------------------------
 recode_participation_var <- function(var) {
