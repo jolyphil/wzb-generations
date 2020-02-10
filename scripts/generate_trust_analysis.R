@@ -18,7 +18,8 @@ ess_ger <-
   select(cntry:idno,trstprl:trstun,dweight, year, yrbrn, age_doi, generation) %>% 
   filter(cname_en == "Germany") %>% 
   filter(!is.na(dweight) & !is.na(generation)) %>% 
-  mutate_at(vars(matches("trst")), .funs = list(binary = function(x) ifelse(x > 6, 1, 0)  ))
+  mutate_at(vars(matches("trst")), .funs = list(binary = function(x) 
+    ifelse(is.na(x), 0, ifelse(x > 6, 1, 0))))
 
 # ______________________________________________________________________________
 # Collapse at the generation-round ====
@@ -31,6 +32,8 @@ ess_gr <-
   group_by(essround, generation) %>% 
   select(-cname_en) %>% dplyr::summarize_all(mean, na.rm = TRUE) %>% 
   mutate(year = round(year,0))
+
+ess_gr
 
 # ______________________________________________________________________________
 # Graphs ====
