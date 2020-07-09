@@ -8,17 +8,18 @@ library(rlang)
 library(dplyr) # Data wrangling
 library(ggplot2) # Graphs
 library(scales)
+library(magrittr)
 
 # ______________________________________________________________________________
 # Load data ====
 
+ess_allctries <- readRDS("data/ess_allctries_19.rds")
 #ess <- readRDS("data/ess.rds")
-ess_allctries <- readRDS("data/ess_allctries.rds")
 #allbus <- readRDS("./data/allbus-reduced.rds")
 
 ess <- ess_allctries %>% 
-  filter(!is.na(dweight) & !is.na(year)) #%>% 
-  #filter(western_europe == 1)
+  filter(!is.na(dweight) & !is.na(year)) %>% 
+  filter(western_europe == 1)
 
 # ______________________________________________________________________________
 # Collapse at the generation-round ====
@@ -26,55 +27,72 @@ ess_gr <-
  ess %>%
   filter(!is.na(generation)) %>%
   group_by(essround, cname_en, generation) %>%
-  summarize_at(vars(year,
-                    polintr,
-                    vote,
-                    contplt,
-                    wrkprty,
-                    wrkorg,
-                    badge,
-                    sgnptit,
-                    pbldmn,
-                    bctprd,
-                    clsprty), 
+  summarize_at(vars(year, polintr, vote, contplt, wrkprty, wrkorg, badge,
+                    sgnptit, pbldmn, bctprd, clsprty),
                ~weighted.mean(., dweight,  na.rm = T )) %>% 
   group_by(essround, generation) %>% 
   select(-cname_en) %>% dplyr::summarize_all(mean, na.rm = TRUE) %>% 
   mutate(year = round(year,0))
+
 # ______________________________________________________________________________
 # Graphs ====
 
 # _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
-# Store variable labels ----
+# Define Langauge and variable labels ----
+# 
+language <- "de"
 
-varname <- c("polintr",
-             "vote",
-             "contplt",
-             "wrkprty",
-             "wrkorg",
-             "badge",
-             "sgnptit",
-             "pbldmn",
-             "bctprd",
-             "clsprty")
-label <- c("Interested in politics",
-           "Voted in last national election",
-           "Contacted politician or government official, in last 12 months",
-           "Worked in political party or action group, in last 12 months",
-           "Worked in another organisation or association, in last 12 months",
-           "Worn or displayed campaign badge/sticker, in last 12 months",
-           "Signed a petition, in last 12 months",
-           "Taken part in lawful public demonstration, in last 12 months",
-           "Boycotted certain products, in last 12 months",
-           "Feel close to a particular party"
-           )
+vars <- tibble(
+  varname = c("polintr", "vote", "contplt", "wrkprty", "wrkorg", "badge",
+              "sgnptit", "pbldmn", "bctprd", "clsprty"),
+  title_en = c("Interested in politics",
+               "Voted in last national election", 
+               "Contacted politician or government official, in last 12 months",
+               "Worked in political party or action group, in last 12 months",
+               "Worked in another organisation or association, in last 12 months",
+               "Worn or displayed campaign badge/sticker, in last 12 months",
+               "Signed a petition, in last 12 months",
+               "Taken part in lawful public demonstration, in last 12 months",
+               "Boycotted certain products, in last 12 months",
+               "Feel close to a particular party"),
+  title_de = c("Politisches Interesse",
+               "Wahlteilnahme (letzte nationale Wahlen)",
+               "Kontakt zu einem Politiker oder einer Amtsperson aufgenommen",
+               "In einer politischen Partei oder Gruppierung mitgearbeitet",
+               "In einer anderen Organisation oder Ähnlichem mitgearbeitet",
+               "Abzeichen/Aufkleber einer politischen Kampagne getragen",
+               "Bürgerbegehren oder Volksbegehren unterschrieben",
+               "Teilnahme an genehmigter öffentlicher Demonstration",
+               "Boykott bestimmter Produkte",
+               "Nähe zu einer Partei"
+  )
+)
+
+labels <- list(
+  yname_en = "Share in generation (in %)",
+  yname_de = "Anteil an Generation (in %)",
+  xname_en = "Age at date of interview",
+  xname_de = "Alter am Tag des Interviews",
+  color_en = c("Baby boomers (1955-69)", "Generation X (1970-84)", "Millennials (1985-2000)"),
+  color_de = c("Baby Boomer (1955-69)", "Generation X (1970-84)", "Millennials (1985-2000)")
+)
+
+# Switch language
+vars %<>%
+  rename_with(~stringr::str_remove( ., paste0("_",language))) %>% 
+  select(!contains("_"))
+labels %<>% 
+  purrr::set_names(~stringr::str_remove( ., paste0("_",language))) %>% 
+  .[!stringr::str_detect(names(.), "_")]
 
 # _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 # Loop over variables and export graphs ----
 
-plot_regular_freq <- function(.data, varname , label){
+plot_regular_freq <- function(.data, varname, vars, labels ){
   
   gd <- .data %>% mutate(var = !!varname)
+  varname_quo  <- as_name({{ varname }})
+  labels$title <- vars %>% filter(varname == varname_quo) %>% pull(title)
   
   gd %>%     
     ggplot(
@@ -84,18 +102,23 @@ plot_regular_freq <- function(.data, varname , label){
     geom_point(aes(color = generation), size = 3) +
     scale_x_continuous(
       name = NULL,
-      limits = c(2002,2016),
-      breaks = c(seq(2002,2016,2))
+      limits = c(2002,2019),
+      breaks = c(seq(2002,2019,2))
     ) +
     scale_y_continuous(
-      name = "Share in generation (in %)", limits = c(0, ceiling(max(gd$var)*100)),
+      limits = c(0, ceiling(max(gd$var)*100)),
       breaks=pretty_breaks()
     ) +
     scale_color_manual(
       values = rev(wesanderson::wes_palette("Darjeeling1",3)),
-      labels = c("Baby boomers (1955-69)", "Generation X (1970-84)", "Millennials (1985-2000)")
+      label = labels$color
     ) +
-    labs(title = label, subtitle = "European Social Survey (2002-2016)", color = "Generation:") +
+    labs(
+      title = labels$title,
+      y = labels$yname,
+      subtitle = "European Social Survey (2002-2019)",
+      color = "Generation:"
+    ) +
     theme_bw() +
     theme(
       text = element_text(family = "Crimson", size = 12),
@@ -112,22 +135,24 @@ plot_regular_freq <- function(.data, varname , label){
   #ggsave(filepath, p)
 }
 
-purrr::walk2(varname, label, ~plot_regular_freq(ess_gr, parse_quo(.x, current_env()), .y))
+purrr::walk(vars$varname, ~plot_regular_freq(ess_gr, parse_quo(.x, current_env()), vars, labels))
 
 # _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 # Compute and plot "Age of Interview" graphs ----
 
-plot_agedoi_freq <- function(.data, value, label, fname = "agedoi"){
-  values <- enquo(value)
+plot_agedoi_freq <- function(.data, varname, vars, labels, fname = "agedoi"){
+  
+  varname_quo  <- as_name({{ varname }})
+  labels$title <- vars %>% filter(varname == varname_quo) %>% pull(title)
   
   .data %>% 
     filter(!is.na(generation)) %>%
     # Compute weighted means
     group_by(cname_en, generation, age_doi) %>%
-    count(!!values, wt = dweight) %>%
-    filter(!is.na(!!values)) %>% 
+    count(!!varname, wt = dweight) %>%
+    filter(!is.na(!!varname)) %>% 
     mutate(f = n/sum(n)) %>%
-    filter(!!values == 1) %>%
+    filter(!!varname == 1) %>%
     group_by(generation, age_doi) %>%
     summarize(f = mean(f)*100) %>%
     filter(age_doi > 15) %>% 
@@ -144,12 +169,12 @@ plot_agedoi_freq <- function(.data, value, label, fname = "agedoi"){
       breaks = pretty_breaks()
     ) +
     scale_color_discrete(
-      labels = c("Boomers (1955-69)", "Generation X (1970-84)", "Millennials (1985-2000)")
+      labels = labels$color
     ) +
     coord_cartesian(xlim = c(16,60), expand = TRUE) +
-    xlab("Age at date of interview") + ylab("Share in generation (in %)") +
     labs(
-      title = label, subtitle = "European Social Survey (2002-2016)",
+      title = labels$title, subtitle = "European Social Survey (2002-2016)",
+      x = labels$xname, y = labels$yname,
       color = "Generation:"
     ) +
     theme_bw() +
@@ -160,15 +185,15 @@ plot_agedoi_freq <- function(.data, value, label, fname = "agedoi"){
     )
 
   ggsave(
-    paste0("figures/", fname, "-", quo_name(values),".png"),
+    paste0("figures/", fname, "-", quo_name(varname),".png"),
     width = 19, height = 19/1.35,
     dpi = 300, units = "cm"
   )
 }
 
-purrr::walk2(
-  varname, label, 
-  ~plot_agedoi_freq(ess, !!parse_quo(.x, env = current_env()), .y)
+purrr::walk(
+  vars$varname,
+  ~plot_agedoi_freq(ess, parse_quo(.x, env = current_env()), vars, labels)
 )
 
 #plot_agedoi_freq(allbus, polintr, fname = "test")
