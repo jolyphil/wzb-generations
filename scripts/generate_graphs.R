@@ -18,8 +18,8 @@ ess_allctries <- readRDS("data/ess_allctries_19.rds")
 #allbus <- readRDS("./data/allbus-reduced.rds")
 
 ess <- ess_allctries %>% 
-  filter(!is.na(dweight) & !is.na(year)) %>% 
-  filter(western_europe == 1)
+  filter(!is.na(dweight) & !is.na(year)) 
+  #filter(western_europe == 1)
 
 # ______________________________________________________________________________
 # Collapse at the generation-round ====
@@ -94,7 +94,8 @@ plot_regular_freq <- function(.data, varname, vars, labels ){
   varname_quo  <- as_name({{ varname }})
   labels$title <- vars %>% filter(varname == varname_quo) %>% pull(title)
   
-  gd %>%     
+  gd %>%
+    mutate(year = ifelse(essround == 9, 2018, year)) %>% 
     ggplot(
       aes(x = year, y = var*100,
       group = generation)) +
@@ -102,8 +103,8 @@ plot_regular_freq <- function(.data, varname, vars, labels ){
     geom_point(aes(color = generation), size = 3) +
     scale_x_continuous(
       name = NULL,
-      limits = c(2002,2019),
-      breaks = c(seq(2002,2019,2))
+      limits = c(2002,2018),
+      breaks = seq(2002,2018,2)
     ) +
     scale_y_continuous(
       limits = c(0, ceiling(max(gd$var)*100)),
@@ -116,7 +117,7 @@ plot_regular_freq <- function(.data, varname, vars, labels ){
     labs(
       title = labels$title,
       y = labels$yname,
-      subtitle = "European Social Survey (2002-2019)",
+      subtitle = "European Social Survey (2002-2018)",
       color = "Generation:"
     ) +
     theme_bw() +
@@ -147,6 +148,14 @@ plot_agedoi_freq <- function(.data, varname, vars, labels, fname = "agedoi"){
   
   .data %>% 
     filter(!is.na(generation)) %>%
+    # Group age_doi due to small n (to be discussed)
+    mutate(
+      age_doi = cut(age_doi,
+        breaks = c(14, seq(20,65,3)), 
+        labels = c(14, seq(20,62,3)
+      )
+    )) %>% 
+    filter(!is.na(age_doi)) %>% 
     # Compute weighted means
     group_by(cname_en, generation, age_doi) %>%
     count(!!varname, wt = dweight) %>%
@@ -155,7 +164,8 @@ plot_agedoi_freq <- function(.data, varname, vars, labels, fname = "agedoi"){
     filter(!!varname == 1) %>%
     group_by(generation, age_doi) %>%
     summarize(f = mean(f)*100) %>%
-    filter(age_doi > 15) %>% 
+    # Recode age_doi back to numeric and center data point
+    mutate(age_doi = as.numeric(as.character(age_doi))+2) %>%
     # Generate plot
     ggplot(aes(
       x = age_doi, y = f,
@@ -163,7 +173,7 @@ plot_agedoi_freq <- function(.data, varname, vars, labels, fname = "agedoi"){
     )) +
     geom_point() +
     geom_smooth(method = 'loess', formula = 'y ~ x', se = TRUE) +
-    scale_x_continuous(breaks = c(16,seq(20,60,10))) +
+    scale_x_continuous(breaks = c(16, seq(20,60,5), 64)) +
     scale_y_continuous(
       limits = c(0, NA),
       breaks = pretty_breaks()
@@ -171,9 +181,9 @@ plot_agedoi_freq <- function(.data, varname, vars, labels, fname = "agedoi"){
     scale_color_discrete(
       labels = labels$color
     ) +
-    coord_cartesian(xlim = c(16,60), expand = TRUE) +
+    coord_cartesian(xlim = c(16,64), expand = TRUE) +
     labs(
-      title = labels$title, subtitle = "European Social Survey (2002-2016)",
+      title = labels$title, subtitle = "European Social Survey (2002-2018)",
       x = labels$xname, y = labels$yname,
       color = "Generation:"
     ) +
