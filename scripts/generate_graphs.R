@@ -19,6 +19,7 @@ ess_allctries <- readRDS("data/ess_allctries_19.rds")
 
 ess <- ess_allctries %>% 
   filter(!is.na(dweight) & !is.na(year)) %>% 
+  filter(age_doi > 15) %>% 
   filter(western_europe == 1)
 
 # ______________________________________________________________________________
@@ -146,14 +147,18 @@ plot_agedoi_freq <- function(.data, varname, vars, labels, fname = "agedoi"){
   labels$title <- vars %>% filter(varname == varname_quo) %>% pull(title)
   
   .data %>% 
-    filter(!is.na(generation)) %>%
+    filter(!is.na(generation)) %>% 
+    # Remove last age_doi of a generation
+    filter(!(age_doi %in% c(64,65))) %>%
+    filter(!(generation == "Millennial" & age_doi >= 34)) %>%
+    filter(!(generation == "Xer" & age_doi >= 49)) %>%
     # Group age_doi due to small n (to be discussed)
-    mutate(
-      age_doi = cut(age_doi,
-        breaks = c(14, seq(20,65,3)), 
-        labels = c(14, seq(20,62,3)
-      )
-    )) %>% 
+    #mutate(
+    #  age_doi = cut(age_doi,
+    #    breaks = c(14, seq(20,65,3)), 
+    #    labels = c(14, seq(20,62,3)
+    #  )
+    #)) %>% 
     filter(!is.na(age_doi)) %>% 
     # Compute weighted means
     group_by(cname_en, generation, age_doi) %>%
@@ -162,9 +167,9 @@ plot_agedoi_freq <- function(.data, varname, vars, labels, fname = "agedoi"){
     mutate(f = n/sum(n)) %>%
     filter(!!varname == 1) %>%
     group_by(generation, age_doi) %>%
-    summarize(f = mean(f)*100) %>%
+    summarize(f = mean(f)*100) %>% 
     # Recode age_doi back to numeric and center data point
-    mutate(age_doi = as.numeric(as.character(age_doi))+2) %>%
+    #mutate(age_doi = as.numeric(as.character(age_doi))+2) %>%
     # Generate plot
     ggplot(aes(
       x = age_doi, y = f,
@@ -204,6 +209,8 @@ purrr::walk(
   vars$varname,
   ~plot_agedoi_freq(ess, parse_quo(.x, env = current_env()), vars, labels)
 )
+
+a
 
 #plot_agedoi_freq(allbus, polintr, fname = "test")
 #plot_agedoi_freq(allbus, mmbprty, fname = "agedoi-allbus")
