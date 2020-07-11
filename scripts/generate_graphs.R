@@ -18,8 +18,8 @@ ess_allctries <- readRDS("data/ess_allctries_19.rds")
 #allbus <- readRDS("./data/allbus-reduced.rds")
 
 ess <- ess_allctries %>% 
-  filter(!is.na(dweight) & !is.na(year)) 
-  #filter(western_europe == 1)
+  filter(!is.na(dweight) & !is.na(year)) %>% 
+  filter(western_europe == 1)
 
 # ______________________________________________________________________________
 # Collapse at the generation-round ====
@@ -32,7 +32,7 @@ ess_gr <-
                ~weighted.mean(., dweight,  na.rm = T )) %>% 
   group_by(essround, generation) %>% 
   select(-cname_en) %>% dplyr::summarize_all(mean, na.rm = TRUE) %>% 
-  mutate(year = round(year,0))
+  mutate(year = (essround * 2) + 2000)
 
 # ______________________________________________________________________________
 # Graphs ====
@@ -95,7 +95,6 @@ plot_regular_freq <- function(.data, varname, vars, labels ){
   labels$title <- vars %>% filter(varname == varname_quo) %>% pull(title)
   
   gd %>%
-    mutate(year = ifelse(essround == 9, 2018, year)) %>% 
     ggplot(
       aes(x = year, y = var*100,
       group = generation)) +
