@@ -65,7 +65,7 @@ c <-
     generation = case_when(
       yrbrn >= 1955 & yrbrn <= 1969 ~ "Boomer",
       yrbrn >= 1970 & yrbrn <= 1984 ~ "Xer",
-      yrbrn >= 1985 ~ "Millennial"
+      yrbrn >= 1985 & yrbrn <= 2000 ~ "Millennial"
     ),
     generation = factor(generation, level = c("Boomer", "Xer", "Millennial")),
     # Political Interest
