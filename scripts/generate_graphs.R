@@ -210,7 +210,6 @@ purrr::walk(
   ~plot_agedoi_freq(ess, parse_quo(.x, env = current_env()), vars, labels)
 )
 
-a
 
 #plot_agedoi_freq(allbus, polintr, fname = "test")
 #plot_agedoi_freq(allbus, mmbprty, fname = "agedoi-allbus")
