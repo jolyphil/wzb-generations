@@ -7,4 +7,4 @@
 *.dta
 *.html
 /figures
-/data/temp
+/data/temp.DS_Store
