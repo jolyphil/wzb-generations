@@ -35,7 +35,7 @@ pct <- function(df, generation, action, digit_level = 0){
 ```
 
 ```{r load_data, include=FALSE}
-ess <- readRDS("data/ess.rds")
+ess <- readRDS("../data/ess_allctries_19.rds")
 ```
 
 ```{r sample_characteristics, include=FALSE}

@@ -136,7 +136,7 @@ plot_regular_freq <- function(.data, varname, vars, labels ){
   #ggsave(filepath, p)
 }
 
-purrr::walk(vars$varname, ~plot_regular_freq(ess_gr, parse_quo(.x, current_env()), vars, labels))
+#purrr::walk(vars$varname, ~plot_regular_freq(ess_gr, parse_quo(.x, current_env()), vars, labels))
 
 # _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 # Compute and plot "Age of Interview" graphs ----

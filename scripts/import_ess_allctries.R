@@ -21,9 +21,16 @@ a <- import_all_rounds("ess@byom.de") # <-- Replace: your email has to be regist
 
 # Download round 9 and overwrite in original import
 download_rounds(rounds = 9, ess_email = "ess@byom.de", output_dir = "data/temp/", format = "stata")
-a[[9]] <- haven::read_dta("./data/temp/ESS9/ESS9e02.dta", encoding='latin1')
+a[[9]] <- haven::read_dta("./data/temp/ESS9/ESS9e03_1.dta", encoding='latin1')
 
 # Limit variables and combine dataset -----------------------------------------------
+fac2num <- function(df){
+  df %>% 
+    mutate(across(where(is.factor), as.numeric)) %>% 
+    mutate(across(where(labelled::is.labelled), as.numeric))
+  
+}
+
 b <- 
   a %>% 
   purrr::map(
@@ -33,8 +40,10 @@ b <-
       wrkorg, badge, sgnptit, pbldmn, bctprd, clsprty, lrscale, stfdem, yrbrn, gndr,
       eisced, mnactic, mbtru, domicil, brncntr)
   ) %>% 
+  purrr::map(fac2num) %>% 
   purrr::map(essurvey::recode_missings) %>% 
   bind_rows()
+
 
 # Visual check
 b %>% 
